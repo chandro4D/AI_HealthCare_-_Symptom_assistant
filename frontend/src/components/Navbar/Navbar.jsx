@@ -28,41 +28,34 @@ function Navbar() {
   }, [location.pathname]);
 
   return (
-    <nav
-      className={`sticky top-0 z-50 bg-white/90 backdrop-blur-md transition-shadow duration-300 ${
-        isScrolled
-          ? "shadow-sm border-b border-slate-200/80"
-          : "border-b border-transparent"
-      }`}
-    >
-      <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 bg-white shadow-sm z-50 ">
+      <div className="max-w-7xl pl-4 sm:px-6 lg:px-8 mx-[110px]">
         <div className="flex  items-center h-16 sm:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-          <h1 className="pl-96">Shekhor</h1>
-            <span className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 shadow-sm">
+          <Link to="/" className="flex items-center gap-2.5 shrink-0 group mr-[200px]">
+            <span className=" relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 shadow-sm">
               <Activity className="w-5 h-5 text-white" strokeWidth={2.5} />
               <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white animate-pulse" />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="text-xl font-bold text-slate-900 tracking-tight">
-                Medi<span className="text-emerald-600">AI</span>
+              <span className="text-2xl font-bold text-slate-900 tracking-tight">
+                AI<span className="text-emerald-600">Healthcare</span>
               </span>
-              <span className="hidden sm:block text-[11px] text-slate-400 font-medium tracking-wide mt-0.5">
-                AI Health Assistant
+              <span className="hidden sm:block text-sm text-slate-400 font-medium tracking-wide mt-0.5">
+                & Symtom Assistant
               </span>
             </span>
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1 mr-[200px]">
             {NAV_LINKS.map((link) => {
               const isActive = location.pathname === link.to;
               return (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  className={`relative px-4 py-2 text-xl font-semibold rounded-lg transition-colors duration-200 ${
                     isActive
                       ? "text-emerald-700"
                       : "text-slate-600 hover:text-emerald-700 hover:bg-emerald-50"
@@ -80,16 +73,16 @@ function Navbar() {
           </div>
 
           {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center ">
             <Link
               to="/login"
-              className="text-sm font-medium text-slate-600 hover:text-emerald-700 px-3 py-2 transition-colors"
+              className="text-xl font-semibold pr-10  text-slate-600 hover:text-emerald-700  transition-colors"
             >
-              Log in
+              Login
             </Link>
             <Link
               to="/signup"
-              className="text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm shadow-emerald-600/20 transition-colors"
+              className="flex  items-center justify-center  text-2xl w-40 h-14 font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm shadow-emerald-600/20 transition-colors"
             >
               Get Started
             </Link>
@@ -98,7 +91,7 @@ function Navbar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setIsMenuOpen((open) => !open)}
-            className="md:hidden p-2 -mr-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+            className="md:hidden p-2 -mr-2 rounded-lg text-slate-600  hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
           >
@@ -117,7 +110,7 @@ function Navbar() {
           isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-4 pb-4 pt-1 border-t border-slate-100 flex flex-col gap-1">
+        <div className="border-t border-slate-100 flex flex-col gap-1">
           {NAV_LINKS.map((link) => {
             const isActive = location.pathname === link.to;
             return (
