@@ -29,7 +29,7 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 bg-white shadow-sm z-50 ">
-      <div className="max-w-7xl pl-4 sm:px-6 lg:px-8 mx-[110px]">
+      <div className="max-w-7xl pl-4 sm:px-6 lg:px-8 mx-[110px] ">
         <div className="flex  items-center h-16 sm:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 shrink-0 group mr-[200px]">
@@ -82,7 +82,7 @@ function Navbar() {
             </Link>
             <Link
               to="/signup"
-              className="flex  items-center justify-center  text-2xl w-40 h-14 font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm shadow-emerald-600/20 transition-colors"
+              className="flex  pt-2 justify-center  text-xl w-36 h-12 font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm shadow-emerald-600/20 transition-colors"
             >
               Get Started
             </Link>
@@ -127,19 +127,16 @@ function Navbar() {
               </Link>
             );
           })}
-          <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-slate-100">
+          <div className="flex flex-col gap-2  border-t border-slate-100">
             <Link
               to="/login"
               className="text-center text-sm font-medium text-slate-600 hover:text-emerald-700 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors"
             >
               Log in
             </Link>
-            <Link
-              to="/signup"
-              className="text-center text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2.5 rounded-lg transition-colors"
-            >
+            {/* <Link to="/signup" className="text-center text-sm font-normal bg-emerald-600 hover:bg-emerald-800 text-white  rounded-lg transition-colors w-[400px] h-[200px]">
               Get Started
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
