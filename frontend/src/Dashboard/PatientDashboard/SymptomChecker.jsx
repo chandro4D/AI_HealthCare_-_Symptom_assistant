@@ -2,13 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, Send, Bell, ShieldAlert, Sparkles } from "lucide-react";
 
-/**
- * AI Symptom Checker
- * -------------------------------------------------
- * Drop this in as your page content (sidebar lives outside this component).
- * Tailwind + Framer Motion. No external state needed — wire the onSend
- * handler up to your real AI endpoint whenever you're ready.
- */
 
 const INITIAL_MESSAGES = [
   {
