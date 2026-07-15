@@ -116,13 +116,13 @@ function Hero() {
 
             <motion.div
               animate={{
-                y: [0, -10, 0],
+                y: [0, -12, 0],
               }}
               transition={{
                 duration: 3,
                 repeat: Infinity,
               }}
-              className="absolute top-14 left-0 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4"
+              className="absolute top-0 left-[-50px] bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 mr-10"
             >
               <FaHeartbeat className="text-red-500 text-3xl" />
 
@@ -137,13 +137,13 @@ function Hero() {
 
             <motion.div
               animate={{
-                y: [0, 12, 0],
+                y: [0, -12, 0],
               }}
               transition={{
                 duration: 4,
                 repeat: Infinity,
               }}
-              className="absolute bottom-14 right-0 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4"
+              className="absolute bottom-0  right-[470px]   bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4"
             >
               <FaCalendarCheck className="text-emerald-500 text-3xl" />
 
@@ -164,7 +164,7 @@ function Hero() {
                 duration: 5,
                 repeat: Infinity,
               }}
-              className="absolute top-1/2 -right-5 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4"
+              className="absolute top-0 -right-10 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4"
             >
               <FaUserMd className="text-cyan-500 text-3xl" />
 
