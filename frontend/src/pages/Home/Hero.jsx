@@ -1,4 +1,9 @@
 import { motion } from "framer-motion";
+import CountUpModule from "react-countup";
+
+const CountUp = CountUpModule.default;
+import { useInView } from "react-intersection-observer";
+
 import {
   FaHeartbeat,
   FaRobot,
@@ -6,8 +11,14 @@ import {
   FaCalendarCheck,
 } from "react-icons/fa";
 import hero from "../../assets/images/hero.png";
+console.log("CountUp:", CountUp);
+console.log("motion:", motion);
 
 function Hero() {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#ECFDF5] via-white to-[#E0F7F4]">
       {/* Background Blur */}
@@ -55,23 +66,54 @@ function Hero() {
 
             {/* Statistics */}
 
-            <div className="grid grid-cols-3 gap-5 mt-14">
-              <div className="bg-white rounded-2xl p-5 shadow-lg text-center">
-                <h2 className="text-3xl font-bold text-emerald-500">10K+</h2>
+            <div
+              ref={ref}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14"
+            >
+              {/* Card 1 */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg text-center transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:scale-105">
+                <h2 className="text-4xl font-bold text-emerald-500">
+                  {inView && (
+                    <>
+                      <CountUp end={10000} duration={3} separator="," />+
+                    </>
+                  )}
+                </h2>
 
-                <p className="text-gray-500 text-sm mt-2">Happy Patients</p>
+                <p className="text-gray-500 text-sm mt-3 font-medium">
+                  Happy Patients
+                </p>
               </div>
 
-              <div className="bg-white rounded-2xl p-5 shadow-lg text-center">
-                <h2 className="text-3xl font-bold text-emerald-500">250+</h2>
+              {/* Card 2 */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg text-center transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:scale-105">
+                <h2 className="text-4xl font-bold text-emerald-500">
+                  {inView && (
+                    <>
+                      <CountUp end={250} duration={3} />+
+                    </>
+                  )}
+                </h2>
 
-                <p className="text-gray-500 text-sm mt-2">Doctors</p>
+                <p className="text-gray-500 text-sm mt-3 font-medium">
+                  Doctors
+                </p>
               </div>
 
-              <div className="bg-white rounded-2xl p-5 shadow-lg text-center">
-                <h2 className="text-3xl font-bold text-emerald-500">24/7</h2>
+              {/* Card 3 */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg text-center transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:scale-105">
+                <h2 className="text-4xl font-bold text-emerald-500">
+                  {inView && (
+                    <>
+                      <CountUp end={24} duration={3} />
+                      /7
+                    </>
+                  )}
+                </h2>
 
-                <p className="text-gray-500 text-sm mt-2">AI Support</p>
+                <p className="text-gray-500 text-sm mt-3 font-medium">
+                  AI Support
+                </p>
               </div>
             </div>
           </motion.div>
