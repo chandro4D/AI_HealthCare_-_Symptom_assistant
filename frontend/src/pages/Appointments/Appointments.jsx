@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function Appointments() {
+  const location = useLocation();
+  const selectedDoctor = location.state?.doctor;
+
   const [appointments, setAppointments] = useState([
     {
       id: 1,
@@ -22,8 +26,8 @@ function Appointments() {
 
   const [formData, setFormData] = useState({
     patientName: "",
-    doctor: "",
-    specialty: "",
+    doctor: selectedDoctor?.name || "",
+    specialty: selectedDoctor?.specialty || "",
     date: "",
     time: "",
     reason: "",
@@ -138,19 +142,17 @@ function Appointments() {
               <input
                 type="text"
                 name="doctor"
-                placeholder="Doctor Name"
                 value={formData.doctor}
-                onChange={handleChange}
-                className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-cyan-500"
+                readOnly
+                className="w-full border rounded-xl p-3 bg-gray-100"
               />
 
               <input
                 type="text"
                 name="specialty"
-                placeholder="Specialty"
                 value={formData.specialty}
-                onChange={handleChange}
-                className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-cyan-500"
+                readOnly
+                className="w-full border rounded-xl p-3 bg-gray-100"
               />
 
               <div className="grid sm:grid-cols-2 gap-4">

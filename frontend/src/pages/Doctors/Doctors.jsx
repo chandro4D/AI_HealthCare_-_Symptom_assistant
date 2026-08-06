@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function Doctors() {
+  const navigate = useNavigate();
+
   const doctors = [
     {
       id: 1,
@@ -185,7 +187,14 @@ function Doctors() {
                   </p>
                 </div>
 
-                <button className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition">
+                <button
+                  className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition"
+                  onClick={() =>
+                    navigate("/appointments", {
+                      state: { doctor },
+                    })
+                  }
+                >
                   Book Appointment
                 </button>
               </div>

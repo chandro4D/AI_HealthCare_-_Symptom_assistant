@@ -11,8 +11,6 @@ import {
   FaCalendarCheck,
 } from "react-icons/fa";
 import hero from "../../assets/images/hero.png";
-console.log("CountUp:", CountUp);
-console.log("motion:", motion);
 
 function Hero() {
   const { ref, inView } = useInView({

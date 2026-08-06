@@ -18,6 +18,7 @@ import {
   FaWallet,
   FaMapMarkerAlt,
   FaHeadset,
+  FaUserMd,
 } from "react-icons/fa";
 import { MdOutlineManageAccounts } from "react-icons/md";
 
@@ -210,8 +211,8 @@ function Dashboard() {
             <SidebarLink to="/" icon={<FaHome />}>
               Home
             </SidebarLink>
-            <SidebarLink to="/shop" icon={<FaCartPlus />}>
-              Shop
+            <SidebarLink to="/doctors" icon={<FaUserMd />}>
+              Doctors
             </SidebarLink>
             <SidebarLink to="/contact" icon={<FaEnvelope />}>
               Contact
