@@ -1,75 +1,70 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const doctors = [
+  {
+    id: 1,
+    name: "Dr. Sarah Ahmed",
+    specialty: "Cardiologist",
+    experience: "12 Years",
+    rating: 4.9,
+    hospital: "National Heart Center",
+    availability: "Available Today",
+    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600",
+  },
+  {
+    id: 2,
+    name: "Dr. Michael Johnson",
+    specialty: "Neurologist",
+    experience: "10 Years",
+    rating: 4.8,
+    hospital: "City Medical Hospital",
+    availability: "Available Tomorrow",
+    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600",
+  },
+  {
+    id: 3,
+    name: "Dr. Emily Watson",
+    specialty: "Dermatologist",
+    experience: "8 Years",
+    rating: 4.7,
+    hospital: "Skin Care Clinic",
+    availability: "Available Today",
+    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=600",
+  },
+  {
+    id: 4,
+    name: "Dr. David Wilson",
+    specialty: "Pediatrician",
+    experience: "15 Years",
+    rating: 5.0,
+    hospital: "Children Hospital",
+    availability: "Available Today",
+    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
+  },
+  {
+    id: 5,
+    name: "Dr. Sophia Khan",
+    specialty: "Gynecologist",
+    experience: "11 Years",
+    rating: 4.8,
+    hospital: "Women's Care Center",
+    availability: "Busy",
+    image: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=600",
+  },
+  {
+    id: 6,
+    name: "Dr. James Brown",
+    specialty: "Orthopedic",
+    experience: "14 Years",
+    rating: 4.9,
+    hospital: "Orthopedic Institute",
+    availability: "Available Today",
+    image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600",
+  },
+];
 function Doctors() {
   const navigate = useNavigate();
-
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. Sarah Ahmed",
-      specialty: "Cardiologist",
-      experience: "12 Years",
-      rating: 4.9,
-      hospital: "National Heart Center",
-      availability: "Available Today",
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600",
-    },
-    {
-      id: 2,
-      name: "Dr. Michael Johnson",
-      specialty: "Neurologist",
-      experience: "10 Years",
-      rating: 4.8,
-      hospital: "City Medical Hospital",
-      availability: "Available Tomorrow",
-      image:
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600",
-    },
-    {
-      id: 3,
-      name: "Dr. Emily Watson",
-      specialty: "Dermatologist",
-      experience: "8 Years",
-      rating: 4.7,
-      hospital: "Skin Care Clinic",
-      availability: "Available Today",
-      image:
-        "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=600",
-    },
-    {
-      id: 4,
-      name: "Dr. David Wilson",
-      specialty: "Pediatrician",
-      experience: "15 Years",
-      rating: 5.0,
-      hospital: "Children Hospital",
-      availability: "Available Today",
-      image:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
-    },
-    {
-      id: 5,
-      name: "Dr. Sophia Khan",
-      specialty: "Gynecologist",
-      experience: "11 Years",
-      rating: 4.8,
-      hospital: "Women's Care Center",
-      availability: "Busy",
-      image:
-        "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=600",
-    },
-    {
-      id: 6,
-      name: "Dr. James Brown",
-      specialty: "Orthopedic",
-      experience: "14 Years",
-      rating: 4.9,
-      hospital: "Orthopedic Institute",
-      availability: "Available Today",
-      image:
-        "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600",
-    },
-  ];
 
   const [search, setSearch] = useState("");
   const [specialty, setSpecialty] = useState("All");
@@ -81,9 +76,9 @@ function Doctors() {
 
   const filteredDoctors = useMemo(() => {
     return doctors.filter((doctor) => {
-      const matchesSearch = doctor.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch =
+        doctor.name.toLowerCase().includes(search.toLowerCase()) ||
+        doctor.specialty.toLowerCase().includes(search.toLowerCase());
 
       const matchesSpecialty =
         specialty === "All" || doctor.specialty === specialty;
@@ -186,8 +181,24 @@ function Doctors() {
                     </span>
                   </p>
                 </div>
-
                 <button
+                  disabled={doctor.availability === "Busy"}
+                  onClick={() =>
+                    navigate("/appointments", {
+                      state: { doctor },
+                    })
+                  }
+                  className={`mt-6 w-full py-3 rounded-lg font-semibold transition ${
+                    doctor.availability === "Busy"
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-cyan-600 hover:bg-cyan-700 text-white"
+                  }`}
+                >
+                  {doctor.availability === "Busy"
+                    ? "Currently Unavailable"
+                    : "Book Appointment"}
+                </button>
+                {/* <button
                   className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition"
                   onClick={() =>
                     navigate("/appointments", {
@@ -196,7 +207,7 @@ function Doctors() {
                   }
                 >
                   Book Appointment
-                </button>
+                </button> */}
               </div>
             </div>
           ))}

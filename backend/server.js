@@ -14,7 +14,7 @@ const authRoutes = require("./routes/auth.routes");
 const patientRoutes = require("./routes/patient.routes");
 const doctorRoutes = require("./routes/doctor.routes");
 
-const appointment_Routes = require("./routes/appointment_routes");
+const appointmentRoutes = require("./routes/appointment.routes");
 
 const adminRoutes = require("./routes/admin.routes");
 const aiRoutes = require("./routes/ai.routes");
@@ -55,7 +55,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/patients", patientRoutes);
 app.use("/api/v1/doctors", doctorRoutes);
-app.use("/api/v1/appointments", appointment_Routes);
+app.use("/api/v1/appointments", appointmentRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/ai", aiRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
