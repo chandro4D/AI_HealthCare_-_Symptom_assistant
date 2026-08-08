@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, Send, Bell, ShieldAlert, Sparkles } from "lucide-react";
 
-
 const INITIAL_MESSAGES = [
   {
     role: "ai",
@@ -78,16 +77,75 @@ export default function SymptomChecker() {
     setIsTyping(true);
 
     // Placeholder response — swap this block for your real AI call.
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages((m) => [
-        ...m,
-        {
-          role: "ai",
-          text: "Dizziness on standing, without other red-flag symptoms, is usually a sign of mild dehydration or a brief drop in blood pressure. Sit or lie down when it happens, and rise slowly. It's worth mentioning to a doctor if it keeps recurring.",
-        },
-      ]);
-    }, 1400);
+    // setTimeout(() => {
+    //   setIsTyping(false);
+    //   setMessages((m) => [
+    //     ...m,
+    //     {
+    //       role: "ai",
+    //       text: "Dizziness on standing, without other red-flag symptoms, is usually a sign of mild dehydration or a brief drop in blood pressure. Sit or lie down when it happens, and rise slowly. It's worth mentioning to a doctor if it keeps recurring.",
+    //     },
+    //   ]);
+    // }, 1400);
+
+    const send = async (text) => {
+      const trimmed = (text ?? input).trim();
+      if (!trimmed) return;
+
+      // Add user message
+      setMessages((m) => [...m, { role: "user", text: trimmed }]);
+      setInput("");
+      setIsTyping(true);
+
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/symptom-check",
+          {
+            message: trimmed,
+          },
+        );
+
+        setMessages((m) => [
+          ...m,
+          {
+            role: "ai",
+            text: res.data.reply,
+          },
+        ]);
+      } catch (error) {
+        setMessages((m) => [
+          ...m,
+          {
+            role: "ai",
+            text: "Sorry, the symptom assistant is temporarily unavailable.",
+          },
+        ]);
+      } finally {
+        setIsTyping(false);
+      }
+    };
+    
+// check the question is really health-related
+    const healthKeywords = [
+      "fever",
+      "cough",
+      "headache",
+      "pain",
+      "dizzy",
+      "nausea",
+      "vomiting",
+      "diarrhea",
+      "chest",
+      "breathing",
+      "skin",
+      "rash",
+      "medicine",
+      "doctor",
+    ];
+
+    function isHealthRelated(text) {
+      return healthKeywords.some((k) => text.toLowerCase().includes(k));
+    }
   }
 
   return (
