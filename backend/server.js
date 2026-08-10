@@ -9,6 +9,8 @@ const dotenv = require("dotenv");
 // Load environment variables
 dotenv.config();
 
+console.log("Gemini key prefix:", process.env.GEMINI_API_KEY?.slice(0, 10));
+
 // Import routes
 const authRoutes = require("./routes/auth.routes");
 const patientRoutes = require("./routes/patient.routes");
@@ -57,6 +59,7 @@ app.use("/api/v1/patients", patientRoutes);
 app.use("/api/v1/doctors", doctorRoutes);
 app.use("/api/v1/appointments", appointmentRoutes);
 app.use("/api/v1/admin", adminRoutes);
+
 app.use("/api/v1/ai", aiRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 

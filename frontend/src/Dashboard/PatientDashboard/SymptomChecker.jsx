@@ -1,28 +1,37 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, Send, Bell, ShieldAlert, Sparkles } from "lucide-react";
+import axios from "axios";
+
+// Demo Initial Messages
+// const INITIAL_MESSAGES = [
+//   {
+//     role: "ai",
+//     text: "Hello Rafiul. I can help you understand possible causes for your symptoms and suggest which department to consult. What are you experiencing today?",
+//   },
+//   {
+//     role: "user",
+//     text: "I've had a persistent headache for 3 days, mostly on the right side, and I feel a bit dizzy when I stand up quickly.",
+//   },
+//   {
+//     role: "ai",
+//     text: "Thanks for the detail. A few quick questions to refine this:",
+//     chips: ["Fever present", "No fever", "Worse with light", "Blurred vision"],
+//   },
+//   {
+//     role: "user",
+//     text: "No fever, but it does feel worse in bright light.",
+//   },
+//   {
+//     role: "ai",
+//     text: "Based on the pattern — one-sided headache, light sensitivity, and dizziness on standing — this is consistent with a tension or migraine-type headache, possibly linked to mild dehydration or blood pressure changes. I've updated the analysis panel on the right. I'd recommend a General Medicine consultation if symptoms persist beyond 2 more days.",
+//   },
+// ];
 
 const INITIAL_MESSAGES = [
   {
     role: "ai",
-    text: "Hello Rafiul. I can help you understand possible causes for your symptoms and suggest which department to consult. What are you experiencing today?",
-  },
-  {
-    role: "user",
-    text: "I've had a persistent headache for 3 days, mostly on the right side, and I feel a bit dizzy when I stand up quickly.",
-  },
-  {
-    role: "ai",
-    text: "Thanks for the detail. A few quick questions to refine this:",
-    chips: ["Fever present", "No fever", "Worse with light", "Blurred vision"],
-  },
-  {
-    role: "user",
-    text: "No fever, but it does feel worse in bright light.",
-  },
-  {
-    role: "ai",
-    text: "Based on the pattern — one-sided headache, light sensitivity, and dizziness on standing — this is consistent with a tension or migraine-type headache, possibly linked to mild dehydration or blood pressure changes. I've updated the analysis panel on the right. I'd recommend a General Medicine consultation if symptoms persist beyond 2 more days.",
+    text: "Hello! I’m your AI healthcare symptom assistant. Please describe your symptoms, how long you’ve had them, your age, and any fever or medical conditions.",
   },
 ];
 
@@ -56,97 +65,338 @@ function severityColor(level) {
   return "text-rose-600";
 }
 
+const healthKeywords = [
+  // General symptoms
+  "fever",
+  "high fever",
+  "low fever",
+  "temperature",
+  "chills",
+  "shivering",
+  "fatigue",
+  "tired",
+  "weakness",
+  "exhaustion",
+  "malaise",
+
+  // Pain
+  "pain",
+  "ache",
+  "headache",
+  "migraine",
+  "neck pain",
+  "back pain",
+  "shoulder pain",
+  "arm pain",
+  "leg pain",
+  "knee pain",
+  "joint pain",
+  "muscle pain",
+  "body pain",
+  "chest pain",
+  "abdominal pain",
+  "stomach pain",
+  "pelvic pain",
+  "toothache",
+  "ear pain",
+
+  // Neurological
+  "dizzy",
+  "dizziness",
+  "vertigo",
+  "fainting",
+  "fainted",
+  "blackout",
+  "numbness",
+  "tingling",
+  "seizure",
+  "convulsion",
+  "tremor",
+  "shaking",
+  "confusion",
+  "memory loss",
+  "difficulty speaking",
+  "slurred speech",
+  "blurred vision",
+  "double vision",
+  "vision loss",
+
+  // Respiratory
+  "cough",
+  "dry cough",
+  "wet cough",
+  "breathing",
+  "shortness of breath",
+  "difficulty breathing",
+  "wheezing",
+  "asthma",
+  "congestion",
+  "runny nose",
+  "stuffy nose",
+  "sore throat",
+  "throat pain",
+  "sneezing",
+  "sinus",
+  "sinus pain",
+  "phlegm",
+  "mucus",
+
+  // Gastrointestinal
+  "nausea",
+  "vomiting",
+  "diarrhea",
+  "constipation",
+  "bloating",
+  "indigestion",
+  "heartburn",
+  "acid reflux",
+  "gas",
+  "loss of appetite",
+  "abdominal swelling",
+  "blood in stool",
+  "black stool",
+
+  // Cardiovascular
+  "chest",
+  "heart",
+  "palpitations",
+  "rapid heartbeat",
+  "slow heartbeat",
+  "irregular heartbeat",
+  "high blood pressure",
+  "low blood pressure",
+  "hypertension",
+  "hypotension",
+  "swelling",
+  "leg swelling",
+  "ankle swelling",
+  "faint",
+  "collapse",
+
+  // Skin
+  "skin",
+  "rash",
+  "itching",
+  "itchy",
+  "hives",
+  "eczema",
+  "psoriasis",
+  "acne",
+  "blisters",
+  "ulcer",
+  "wound",
+  "cut",
+  "burn",
+  "bruise",
+  "redness",
+  "infection",
+  "pus",
+  "skin discoloration",
+
+  // Urinary
+  "urination",
+  "frequent urination",
+  "burning urination",
+  "painful urination",
+  "blood in urine",
+  "urinary tract infection",
+  "uti",
+  "kidney pain",
+
+  // Endocrine / metabolic
+  "diabetes",
+  "high sugar",
+  "low sugar",
+  "thyroid",
+  "weight loss",
+  "weight gain",
+  "excessive thirst",
+  "frequent hunger",
+  "night sweats",
+
+  // Infectious diseases
+  "flu",
+  "cold",
+  "covid",
+  "covid-19",
+  "dengue",
+  "malaria",
+  "typhoid",
+  "hepatitis",
+  "tuberculosis",
+  "tb",
+  "viral infection",
+  "bacterial infection",
+  "fungal infection",
+
+  // Women’s health
+  "pregnancy",
+  "pregnant",
+  "missed period",
+  "irregular period",
+  "heavy bleeding",
+  "vaginal bleeding",
+  "vaginal discharge",
+  "menstrual pain",
+  "pcos",
+  "ovarian pain",
+
+  // Men’s health
+  "testicular pain",
+  "prostate",
+  "erectile dysfunction",
+
+  // Mental / psychological
+  "anxiety",
+  "anxious",
+  "panic attack",
+  "panic",
+  "depression",
+  "depressed",
+  "stress",
+  "stressed",
+  "insomnia",
+  "can't sleep",
+  "sleep problem",
+  "nightmare",
+  "mood swings",
+  "irritable",
+  "hopeless",
+  "worthless",
+  "crying",
+  "overthinking",
+  "fear",
+  "phobia",
+  "ocd",
+  "ptsd",
+  "bipolar",
+  "hallucination",
+  "hearing voices",
+  "paranoia",
+  "suicidal",
+  "self-harm",
+
+  // Allergies
+  "allergy",
+  "allergic reaction",
+  "swollen lips",
+  "swollen tongue",
+  "anaphylaxis",
+
+  // Injury / emergency
+  "fracture",
+  "broken bone",
+  "sprain",
+  "strain",
+  "dislocation",
+  "head injury",
+  "trauma",
+  "accident",
+  "bleeding",
+  "severe bleeding",
+
+  // Medical care
+  "medicine",
+  "medication",
+  "tablet",
+  "capsule",
+  "antibiotic",
+  "doctor",
+  "hospital",
+  "clinic",
+  "appointment",
+  "symptom",
+  "diagnosis",
+  "treatment",
+  "prescription",
+];
 export default function SymptomChecker() {
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const [symptoms, setsymptoms] = useState(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef(null);
+
+  // const isHealthRelated = (text) => {
+  //   return healthKeywords.some((keyword) =>
+  //     text.toLowerCase().includes(keyword.toLowerCase()),
+  //   );
+  // };
+  const isHealthRelated = (text) => {
+    const lower = text.toLowerCase();
+
+    if (healthKeywords.some((k) => lower.includes(k))) return true;
+
+    // Minimum symptom-like sentence
+    return lower.split(" ").length >= 3;
+  };
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages, isTyping]);
+  }, [symptoms, isTyping]);
 
-  function send(text) {
+  const send = async (text) => {
     const trimmed = (text ?? input).trim();
     if (!trimmed) return;
-    setMessages((m) => [...m, { role: "user", text: trimmed }]);
+
+    // Frontend validation
+    if (!isHealthRelated(trimmed)) {
+      setsymptoms((s) => [
+        ...s,
+        { role: "user", text: trimmed },
+        {
+          role: "ai",
+          text: "I am a healthcare symptom assistant and can only help with health-related questions...",
+        },
+      ]);
+      setInput("");
+      return;
+    }
+
+    // Add user message immediately
+    const updatedMessages = [...symptoms, { role: "user", text: trimmed }];
+
+    setsymptoms(updatedMessages);
     setInput("");
     setIsTyping(true);
 
-    // Placeholder response — swap this block for your real AI call.
-    // setTimeout(() => {
-    //   setIsTyping(false);
-    //   setMessages((m) => [
-    //     ...m,
-    //     {
-    //       role: "ai",
-    //       text: "Dizziness on standing, without other red-flag symptoms, is usually a sign of mild dehydration or a brief drop in blood pressure. Sit or lie down when it happens, and rise slowly. It's worth mentioning to a doctor if it keeps recurring.",
-    //     },
-    //   ]);
-    // }, 1400);
-
-    const send = async (text) => {
-      const trimmed = (text ?? input).trim();
-      if (!trimmed) return;
-
-      // Add user message
-      setMessages((m) => [...m, { role: "user", text: trimmed }]);
-      setInput("");
-      setIsTyping(true);
-
-      try {
-        const res = await axios.post(
-          "http://localhost:5000/api/symptom-check",
-          {
-            message: trimmed,
+    try {
+      const token = localStorage.getItem("token");
+      
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/ai/symptom-check",
+        {
+          symptoms: updatedMessages,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        },
+      );
 
-        setMessages((m) => [
-          ...m,
-          {
-            role: "ai",
-            text: res.data.reply,
-          },
-        ]);
-      } catch (error) {
-        setMessages((m) => [
-          ...m,
-          {
-            role: "ai",
-            text: "Sorry, the symptom assistant is temporarily unavailable.",
-          },
-        ]);
-      } finally {
-        setIsTyping(false);
-      }
-    };
-    
-// check the question is really health-related
-    const healthKeywords = [
-      "fever",
-      "cough",
-      "headache",
-      "pain",
-      "dizzy",
-      "nausea",
-      "vomiting",
-      "diarrhea",
-      "chest",
-      "breathing",
-      "skin",
-      "rash",
-      "medicine",
-      "doctor",
-    ];
-
-    function isHealthRelated(text) {
-      return healthKeywords.some((k) => text.toLowerCase().includes(k));
+      setsymptoms((s) => [
+        ...s,
+        {
+          role: "ai",
+          text: res.data.reply,
+        },
+      ]);
+    } catch (error) {
+      setsymptoms((s) => [
+        ...s,
+        {
+          role: "ai",
+          text: "Sorry, the symptom assistant is temporarily unavailable. Please try again in a moment.",
+        },
+      ]);
+    } finally {
+      setIsTyping(false);
     }
-  }
+  };
 
   return (
     <div className="flex h-full min-h-screen w-full bg-[#F5F2EA] font-sans text-stone-800">
@@ -197,7 +447,7 @@ export default function SymptomChecker() {
               ref={scrollRef}
               className="flex-1 space-y-4 overflow-y-auto px-6 py-5"
             >
-              {messages.map((m, i) => (
+              {symptoms.map((m, i) => (
                 <ChatBubble key={i} msg={m} onChip={send} />
               ))}
               <AnimatePresence>{isTyping && <TypingBubble />}</AnimatePresence>
@@ -215,6 +465,7 @@ export default function SymptomChecker() {
                 className="flex-1 rounded-full border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
               />
               <button
+                disabled={isTyping}
                 onClick={() => send()}
                 className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-emerald-700 text-white transition hover:bg-emerald-800 active:scale-95"
               >
