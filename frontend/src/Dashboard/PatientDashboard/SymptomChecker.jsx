@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, Send, Bell, ShieldAlert, Sparkles } from "lucide-react";
 import axios from "axios";
+import MedicalResponse from "./MedicalResponse";
 
 // Demo Initial Messages
 // const INITIAL_MESSAGES = [
@@ -364,7 +365,7 @@ export default function SymptomChecker() {
 
     try {
       const token = localStorage.getItem("token");
-      
+
       const res = await axios.post(
         "http://localhost:5000/api/v1/ai/symptom-check",
         {
@@ -428,7 +429,7 @@ export default function SymptomChecker() {
         {/* Body */}
         <div className="flex flex-1 gap-6 overflow-hidden p-6">
           {/* Chat panel */}
-          <div className="flex flex-1 flex-col rounded-2xl border border-stone-200 bg-white shadow-sm">
+          <div className="flex h-[540px] flex-col rounded-2xl border border-stone-200 bg-white shadow-sm">
             <div className="flex items-center gap-3 border-b border-stone-100 px-6 py-4">
               <div className="grid h-9 w-9 place-items-center rounded-full bg-emerald-700 text-white">
                 <Sparkles className="h-4 w-4" />
@@ -445,7 +446,7 @@ export default function SymptomChecker() {
 
             <div
               ref={scrollRef}
-              className="flex-1 space-y-4 overflow-y-auto px-6 py-5"
+              className="flex-1 space-y-4 overflow-y-auto px-6 py-2"
             >
               {symptoms.map((m, i) => (
                 <ChatBubble key={i} msg={m} onChip={send} />
@@ -453,7 +454,7 @@ export default function SymptomChecker() {
               <AnimatePresence>{isTyping && <TypingBubble />}</AnimatePresence>
             </div>
 
-            <div className="flex items-center gap-3 border-t border-stone-100 px-6 py-4">
+            <div className="flex items-center gap-3 border-t border-stone-100 px-6 py-2">
               <button className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-stone-200 text-stone-500 hover:bg-stone-50">
                 <Mic className="h-4 w-4" />
               </button>
@@ -508,7 +509,17 @@ function ChatBubble({ msg, onChip }) {
             isAI ? "bg-stone-50 text-stone-700" : "bg-emerald-700 text-white"
           }`}
         >
-          {msg.text}
+          {isAI ? (
+            /Assessment:|Recommended department:|Urgency:/i.test(
+              msg.text.replace(/\*\*/g, ""),
+            ) ? (
+              <MedicalResponse text={msg.text} />
+            ) : (
+              msg.text
+            )
+          ) : (
+            msg.text
+          )}
         </div>
         {msg.chips && (
           <div className="mt-2 flex flex-wrap gap-2">
