@@ -24,7 +24,7 @@ function Hero() {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-300 rounded-full blur-[150px] opacity-20"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
-        <div className="grid lg:grid-cols-2 gap-14 items-center">
+        <div className="grid lg:grid-cols-2 gap-18 items-center ">
           {/* Left Side */}
           <motion.div
             initial={{ opacity: 0, x: -70 }}

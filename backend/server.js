@@ -14,6 +14,7 @@ console.log("Gemini key prefix:", process.env.GEMINI_API_KEY?.slice(0, 10));
 // Import routes
 const authRoutes = require("./routes/auth.routes");
 const patientRoutes = require("./routes/patient.routes");
+// for doctors
 const doctorRoutes = require("./routes/doctor.routes");
 
 const appointmentRoutes = require("./routes/appointment_routes");
@@ -21,6 +22,8 @@ const appointmentRoutes = require("./routes/appointment_routes");
 const adminRoutes = require("./routes/admin.routes");
 const aiRoutes = require("./routes/ai.routes");
 const notificationRoutes = require("./routes/notification.routes");
+
+
 
 // Import error handler
 const { errorHandler, notFound } = require("./middleware/error.middleware");
@@ -59,9 +62,9 @@ app.use("/api/v1/patients", patientRoutes);
 app.use("/api/v1/doctors", doctorRoutes);
 app.use("/api/v1/appointments", appointmentRoutes);
 app.use("/api/v1/admin", adminRoutes);
-
 app.use("/api/v1/ai", aiRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
+app.use("/api/v1/doctors", doctorRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 app.use(notFound);
