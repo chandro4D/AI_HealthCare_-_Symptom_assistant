@@ -5,26 +5,7 @@ function Appointments() {
   const location = useLocation();
   const selectedDoctor = location.state?.doctor;
 
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      patientName: "John Smith",
-      doctor: "Dr. Sarah Johnson",
-      specialty: "Cardiologist",
-      date: "2026-07-20",
-      time: "10:00",
-      status: "Confirmed",
-    },
-    {
-      id: 2,
-      patientName: "Emma Brown",
-      doctor: "Dr. Michael Brown",
-      specialty: "Dermatologist",
-      date: "2026-07-23",
-      time: "15:30",
-      status: "Pending",
-    },
-  ]);
+  const [appointments, setAppointments] = useState([]);
 
   const [formData, setFormData] = useState({
     patientName: "",

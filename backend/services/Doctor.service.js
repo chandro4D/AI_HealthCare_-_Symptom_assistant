@@ -1,6 +1,12 @@
 const Doctor = require("../models/Doctor.model");
 
 const getDoctors = async ({ search, specialty, page = 1, limit = 9 }) => {
+  console.log("DB:", Doctor.db.name);
+  console.log("Total docs (no filter):", await Doctor.countDocuments({}));
+  console.log(
+    "Total active docs:",
+    await Doctor.countDocuments({ isActive: true }),
+  );
   const query = {
     isActive: true,
   };

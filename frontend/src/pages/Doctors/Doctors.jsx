@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDoctors, getSpecialties } from "../../services/doctorService";
 
@@ -137,7 +137,7 @@ function Doctors() {
     // Pass only the doctor ID
     navigate("/appointments", {
       state: {
-        doctorId: doctor._id,
+        doctor: doctor,
       },
     });
   };
