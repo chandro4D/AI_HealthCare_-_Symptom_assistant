@@ -48,8 +48,8 @@ const SignUp = () => {
 
     const form = e.target;
 
-    const name = form.name.value;
-    const email = form.email.value;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
     const password = form.password.value;
     const role = selectedRole;
 
@@ -59,57 +59,86 @@ const SignUp = () => {
       password,
       role,
     };
-    console.log(userInfo);
 
+    console.log("Register data:", userInfo);
+
+    // Password validation
     if (password.length < 6) {
       setRegisterError("Password should be at least 6 characters");
+
       Swal.fire({
         icon: "error",
         text: "Password should be at least 6 characters!",
       });
-      return;
-    } else if (!/[A-Z]/.test(password)) {
-      setRegisterError(
-        "Your password should have at least one upper case letter",
-      );
-      Swal.fire({
-        icon: "error",
-        text: "Your password should have at least one upper case letter!",
-      });
-      return;
-    } else if (!/[a-z]/.test(password)) {
-      setRegisterError(
-        "Your password should have at least one lower case letter",
-      );
-      Swal.fire({
-        icon: "error",
-        text: "Your password should have at least one lower case letter!",
-      });
+
       return;
     }
+
+    if (!/[A-Z]/.test(password)) {
+      setRegisterError(
+        "Your password should have at least one uppercase letter",
+      );
+
+      Swal.fire({
+        icon: "error",
+        text: "Your password should have at least one uppercase letter!",
+      });
+
+      return;
+    }
+
+    if (!/[a-z]/.test(password)) {
+      setRegisterError(
+        "Your password should have at least one lowercase letter",
+      );
+
+      Swal.fire({
+        icon: "error",
+        text: "Your password should have at least one lowercase letter!",
+      });
+
+      return;
+    }
+
     setRegisterError("");
 
     try {
       setSubmitting(true);
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
         },
-        body: JSON.stringify(userInfo),
-      });
+      );
 
       const data = await res.json();
-      console.log(data);
+
+      console.log("Register response:", data);
+
+      if (!res.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
 
       Swal.fire({
         icon: "success",
-        text: "Account Created successfully!",
+        title: "Success!",
+        text: "Account created successfully!",
       });
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
-      console.log(error);
+      console.error("Registration error:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: error.message || "Something went wrong!",
+      });
     } finally {
       setSubmitting(false);
     }

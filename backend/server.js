@@ -13,15 +13,14 @@ console.log("Gemini key prefix:", process.env.GEMINI_API_KEY?.slice(0, 10));
 // Database connection
 const connectDB = require("./config/db");
 
-
 // Import routes
 const authRoutes = require("./routes/auth.routes");
 const patientRoutes = require("./routes/patient.routes");
 const doctorRoutes = require("./routes/doctor.routes");
-const appointmentRoutes = require("./routes/appointment_routes");
 const adminRoutes = require("./routes/admin.routes");
 const aiRoutes = require("./routes/ai.routes");
 const notificationRoutes = require("./routes/notification.routes");
+const appointmentRoutes = require("./routes/appointment_routes");
 
 // Import error handler
 const { errorHandler, notFound } = require("./middleware/error.middleware");

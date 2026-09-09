@@ -14,6 +14,7 @@ import SymptomChecker from "../Dashboard/PatientDashboard/SymptomChecker";
 import About from "../pages/About/About";
 import Doctors from "../pages/Doctors/Doctors";
 import Appointments from "../pages/Appointments/Appointments";
+import PatientAppointments from "../Dashboard/PatientDashboard/PatientAppointments";
 
 function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ function AppRoutes() {
           {/* Patient Dashboard Routes */}
           <Route path="patientHome" element={<PatientHome />} />
           <Route path="symptomChecker" element={<SymptomChecker />} />
+          <Route path="patientAppointments" element={<PatientAppointments />} />
           {/* Add more nested routes here as you build them, e.g.: */}
           {/* <Route path="findDoctor" element={<FindDoctor />} /> */}
           {/* <Route path="appointments" element={<Appointments />} /> */}

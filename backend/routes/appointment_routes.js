@@ -1,39 +1,46 @@
 const express = require("express");
-const router = express.Router();
 
 const {
-  bookAppointment,
-  getAppointments,
+  createAppointment,
   getMyAppointments,
-  getAppointmentById,
-  updateAppointment,
-  cancelAppointment,
+  getDoctorAppointments,
+  getAllAppointments,
+  updateAppointmentStatus,
 } = require("../controllers/appointment.controller");
 
 const { protect, authorize } = require("../middleware/auth.middleware");
 
-// All appointment routes require login
-router.use(protect);
+const router = express.Router();
 
-// Patient appointments
-router.get("/my", authorize("patient"), getMyAppointments);
+// ============================================
+// PATIENT
+// ============================================
 
-// GET /api/v1/appointments
-// POST /api/v1/appointments
-router
-  .route("/")
-  .get(getAppointments)
-  .post(authorize("patient"), bookAppointment);
+router.post("/", protect, createAppointment);
 
-// GET /api/v1/appointments/:id
-// PUT /api/v1/appointments/:id
-// DELETE /api/v1/appointments/:id
+router.get("/my", protect, getMyAppointments);
 
-// Single Appoinment
-router
-  .route("/:id")
-  .get(getAppointmentById)
-  .put(updateAppointment)
-  .delete(authorize("patient", "admin"), cancelAppointment);
+// ============================================
+// DOCTOR
+// ============================================
+
+router.get("/doctor", protect, authorize("doctor"), getDoctorAppointments);
+
+// ============================================
+// ADMIN
+// ============================================
+
+router.get("/", protect, authorize("admin"), getAllAppointments);
+
+// ============================================
+// UPDATE STATUS
+// ============================================
+
+router.patch(
+  "/:id/status",
+  protect,
+  authorize("admin", "doctor"),
+  updateAppointmentStatus,
+);
 
 module.exports = router;

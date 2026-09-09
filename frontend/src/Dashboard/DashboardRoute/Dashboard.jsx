@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   FaHome,
@@ -170,7 +169,7 @@ function Dashboard() {
                   Find a Doctor
                 </SidebarLink>
                 <SidebarLink
-                  to="/dashboard/appointments"
+                  to="/dashboard/PatientAppointments"
                   icon={<FaCalendarAlt />}
                 >
                   Appointments
@@ -182,7 +181,7 @@ function Dashboard() {
                   Health Records
                 </SidebarLink>
                 <SidebarLink
-                  to="/dashboard/prescriptions"
+                  to="/dashboard/PatientPrescriptions"
                   icon={<FaPrescriptionBottleAlt />}
                 >
                   Prescriptions

@@ -5,17 +5,12 @@ import { FaHeartbeat } from "react-icons/fa";
 import { MdHealthAndSafety } from "react-icons/md";
 import doctor from "../../assets/images/hero.png";
 import { useState } from "react";
-import {
-  User,
-  Stethoscope,
-  ShieldCheck,
-} from "lucide-react";
+import { User, Stethoscope, ShieldCheck } from "lucide-react";
 const ROLES = [
   { key: "patient", label: "Patient", icon: User },
   { key: "doctor", label: "Doctor", icon: Stethoscope },
   { key: "admin", label: "Admin", icon: ShieldCheck },
 ];
-
 
 const Login = () => {
   const location = useLocation();
@@ -31,7 +26,7 @@ const Login = () => {
 
     const form = e.target;
 
-    const email = form.email.value;
+    const email = form.email.value.trim();
     const password = form.password.value;
 
     const userInfo = {
@@ -39,18 +34,28 @@ const Login = () => {
       password,
       role: selectedRole,
     };
-    console.log(userInfo)
+
+    console.log("Login data:", userInfo);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
         },
-        body: JSON.stringify(userInfo),
-      });
+      );
 
       const data = await res.json();
+
+      console.log("Login response:", data);
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
 
       if (data.token) {
         localStorage.setItem("token", data.token);
@@ -58,18 +63,23 @@ const Login = () => {
 
         Swal.fire({
           icon: "success",
-          text: "Login Successfully!",
+          title: "Success!",
+          text: "Login successful!",
         });
-
+        
+        window.dispatchEvent(new Event("userUpdated"));
         navigate(from, { replace: true });
       } else {
-        Swal.fire({
-          icon: "error",
-          text: "Please provide correct email and password!",
-        });
+        throw new Error("Token was not returned by server");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Login error:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: error.message || "Something went wrong!",
+      });
     }
   };
 
