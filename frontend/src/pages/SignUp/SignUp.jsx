@@ -17,10 +17,7 @@ import { FaHeartbeat } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import doctor from "../../assets/images/doctor-illustration.png"; // Updated import path for the doctor illustration
-// import { AuthContext } from "../../Provider/AuthProvider";
-// import useAxiosPublic from "../../Hook/useAxiosPublic";
-// import { useContext } from "react";
-// import { Helmet } from "react-helmet-async";
+
 
 const ROLES = [
   { key: "patient", label: "Patient", icon: User },
@@ -29,7 +26,7 @@ const ROLES = [
 ];
 
 const SignUp = () => {
-  // const axiosPublic = useAxiosPublic();
+
   const [registerError, setRegisterError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [selectedRole, setSelectedRole] = useState("patient");
